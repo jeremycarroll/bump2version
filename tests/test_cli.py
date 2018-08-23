@@ -1317,6 +1317,26 @@ def test_no_list_no_stdout(tmpdir, vcs):
 
     assert out == ""
 
+
+def test_when_new_version_is_old_version(tmpdir, capsys):
+    tmpdir.join("content.txt").write("version 1.5.0")
+    tmpdir.chdir()
+    tmpdir.join(".bumpversion.cfg").write(dedent("""
+        [bumpversion]
+        current_version = 1.5.0
+        commit = False
+        tag = False
+
+        [bumpversion:file:content.txt]
+        search = version {current_version}
+        replace = version {new_version}
+        """).strip())
+
+    main(['ignored', '--new-version', '1.5.0'])
+
+    assert 'version 1.5.0' == tmpdir.join("content.txt").read()
+
+
 def test_bump_non_numeric_parts(tmpdir, capsys):
     tmpdir.join("with_prereleases.txt").write("1.5.dev")
     tmpdir.chdir()
@@ -1344,6 +1364,7 @@ def test_bump_non_numeric_parts(tmpdir, capsys):
     main(['minor', '--verbose'])
 
     assert '1.6.dev' == tmpdir.join("with_prereleases.txt").read()
+
 
 def test_optional_value_from_documentation(tmpdir):
 
