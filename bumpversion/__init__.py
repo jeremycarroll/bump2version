@@ -266,12 +266,12 @@ class ConfiguredFile(object):
             search_for, replace_with
         )
 
-        if file_content_before == file_content_after:
-            # TODO expose this to be configurable
-            file_content_after = file_content_before.replace(
-                current_version.original,
-                replace_with,
-            )
+        # if file_content_before == file_content_after:
+        #     # TODO expose this to be configurable
+        #     file_content_after = file_content_before.replace(
+        #         current_version.original,
+        #         replace_with,
+        #     )
 
         if file_content_before != file_content_after:
             logger.info("{} file {}:".format(
